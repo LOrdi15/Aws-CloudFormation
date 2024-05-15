@@ -1,0 +1,39 @@
+Parameters:
+  LatestAmiId:
+    Type: AWS::EC2::Image::Id
+    Description: 'The ID of the latest AMI.'
+
+Resources:
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      Tags:
+        - Key: Name
+          Value: Resource-return-values-workshop
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security Group for EC2 instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  InstanceID:
+    Description: The ID of the launched instance
+    Value: !Ref Ec2Instance
+
+  PublicIP:
+    Description: Public IP of the launched instance
+    Value: !GetAtt Ec2Instance.PublicIp
+
+  SecurityGroupId:
+    Description: ID of the security group created
+    Value: !GetAtt InstanceSecurityGroup.GroupId

@@ -1,0 +1,23 @@
+Parameters:
+  AmiID:
+    Type: AWS::EC2::Image::Id
+    Description: 'The ID of the AMI.'
+  InstanceType:
+    Type: String
+    Description: 'The instance type for the EC2 instance.'
+    Default: 't2.micro'
+    AllowedValues: 
+      - 't2.micro'
+      - 'm1.small'
+      - 'm1.large'
+    ConstraintDescription: 'must be a valid EC2 instance type.'
+
+Resources:
+  WebServerInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AmiID
+      InstanceType: !Ref InstanceType
+      Tags:
+        - Key: Name
+          Value: !Join [ '-', [ !Ref InstanceType, webserver ] ]
